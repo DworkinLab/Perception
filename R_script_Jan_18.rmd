@@ -134,18 +134,21 @@ DGRP_dev_Female$DGRP <- factor(DGRP_dev_Female$DGRP, levels = DGRP_dev_Female$DG
 DGRP_by_countsFEMALE <- subset(DGRP_by_counts, Sex == "Female")
 ```
 
-Sample sizes:
+###Sample sizes:
   
-  Females
-```{r, echo=FALSE}
-summary(DGRP_by_countsFEMALE$DGRP)
-```
-
-
 Males
 ```{r, echo=FALSE}
 summary(DGRP_by_countsMALE$DGRP)
 ```
+  
+
+Females
+```{r, echo=FALSE}
+#Females
+summary(DGRP_by_countsFEMALE$DGRP)
+```
+
+
 
 ###Plots
 
