@@ -1,19 +1,15 @@
 ---
   title: "Perception R Code"
-output:
-  html_document: default
 ---
   
-  ##How do different DGRP di-hybrid lines vary in their ability to perceive and avoid predator cues?
+##How do different DGRP di-hybrid lines vary in their ability to perceive and avoid predator cues?
   
-  ###Hypothesis: 
+###Hypothesis: 
   DGRP dihybrids will show significant genetic variation in ability to percieve predator cues
 
 
 ###Prediction:
 Each DGRP dihybrid lines will show within line consistancy, but display between line variability in the proportion within a spider vial, ranging from very low (~ 0%, avoiding spider cues) to a random assortment (~50%, randomly assortment, not recognizing spider cues).
-
-
 
 
 
