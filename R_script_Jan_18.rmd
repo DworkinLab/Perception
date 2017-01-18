@@ -149,7 +149,7 @@ summary(DGRP_by_countsMALE$DGRP)
 
 ###Plots
 
-```{r, fig.width=12, fig.height=10, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, fig.width=13, fig.height=8, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(data=DGRP_dev, aes(x=DGRP, y=Mean_prop_spi, colour=Sex))+ 
   geom_point(size = 4) + geom_errorbar(aes(ymax = Mean_prop_spi + se, ymin = Mean_prop_spi - se, width=0.5)) +
   guides(colour=FALSE) +
@@ -162,7 +162,7 @@ ggplot(data=DGRP_dev, aes(x=DGRP, y=Mean_prop_spi, colour=Sex))+
 ```
 
 
-```{r, fig.width=12, fig.height=10, echo=FALSE}
+```{r, fig.width=13, fig.height=8, echo=FALSE}
 ggplot(data=DGRP_dev_Male, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
   geom_bar(stat="identity", position=position_dodge()) +
   geom_errorbar(aes(ymax = Mean_prop_spi + se, ymin = Mean_prop_spi - se, width=0.5)) +
@@ -177,7 +177,7 @@ ggplot(data=DGRP_dev_Male, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
 ```
 
 
-```{r, fig.width=12, fig.height=10, echo=FALSE}
+```{r, fig.width=13, fig.height=8, echo=FALSE}
 ggplot(data=DGRP_dev_Female, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
   geom_bar(stat="identity", position=position_dodge()) +
   geom_errorbar(aes(ymax = Mean_prop_spi + se, ymin = Mean_prop_spi - se, width=0.5)) +
