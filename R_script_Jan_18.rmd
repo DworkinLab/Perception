@@ -104,11 +104,14 @@ summary(DGRP_sub)
 ```
 
 ###Sex Correlation:
+
+
 ```{r, echo=FALSE}
 with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
 ```
 ```{r, echo=FALSE}
-with(DGRP_sub, plot(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"] ))
+line2 <- lm(DGRP_sub$prop_spider[DGRP_sub$Sex == "Female"] ~ DGRP_sub$prop_spider[DGRP_sub$Sex == "Male"])
+with(DGRP_sub, plot(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"], xlab = "Females", ylab = "Males", abline(line2), main = "Male Female correlation: proportion with spider"))
 ```
 
 
@@ -145,15 +148,19 @@ summary(DGRP_by_countsMALE$DGRP)
 ```
 
 ###Plots
-All together
+
 ```{r, fig.width=12, fig.height=10, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(data=DGRP_dev, aes(x=DGRP, y=Mean_prop_spi, colour=Sex))+ 
   geom_point(size = 4) + geom_errorbar(aes(ymax = Mean_prop_spi + se, ymin = Mean_prop_spi - se, width=0.5)) +
   guides(colour=FALSE) +
+  ggtitle("Proportion with spider for 59 dihybrid lines with std Error") +
+  xlab("DGRP") + ylab("Proportion with spider") +
+  theme(axis.title.x = element_text(size=15)) +
+  theme(axis.title.y = element_text(size=15)) +
+  theme(plot.title = element_text(size=22)) +
   theme(axis.text.x = element_text(angle=90, hjust = 1))
 ```
 
-Males
 
 ```{r, fig.width=12, fig.height=10, echo=FALSE}
 ggplot(data=DGRP_dev_Male, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
@@ -163,10 +170,12 @@ ggplot(data=DGRP_dev_Male, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
   xlab("DGRP") + ylab("Proportion with Spider") +
   scale_fill_manual(values=c("#E69F00")) +
   guides(fill=FALSE, size=FALSE) +
+  theme(plot.title = element_text(size=22)) +
+  theme(axis.title.x = element_text(size=15)) +
+  theme(axis.title.y = element_text(size=15)) +
   theme(axis.text.x = element_text(angle=90, hjust = 1))
 ```
 
-Females
 
 ```{r, fig.width=12, fig.height=10, echo=FALSE}
 ggplot(data=DGRP_dev_Female, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
@@ -175,6 +184,9 @@ ggplot(data=DGRP_dev_Female, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
   ggtitle("Females") +
   xlab("DGRP") + ylab("Proportion with Spider") +
   guides(fill=FALSE, size=FALSE) +
+  theme(plot.title = element_text(size=22)) +
+  theme(axis.title.x = element_text(size=15)) +
+  theme(axis.title.y = element_text(size=15)) +
   theme(axis.text.x = element_text(angle=90, hjust = 1))  
 ```
 

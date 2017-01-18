@@ -51,10 +51,12 @@ Each DGRP dihybrid lines will show within line consistancy, but display between 
 
 ###Sex Correlation:
 
+
+
 ```
 ## [1] -0.2526972
 ```
-![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png)
+![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15-1.png)
 
 
 
@@ -90,16 +92,14 @@ Males
 ```
 
 ###Plots
-All together
-![plot of chunk unnamed-chunk-18](figure/unnamed-chunk-18-1.png)
-
-Males
 
 ![plot of chunk unnamed-chunk-19](figure/unnamed-chunk-19-1.png)
 
-Females
 
 ![plot of chunk unnamed-chunk-20](figure/unnamed-chunk-20-1.png)
+
+
+![plot of chunk unnamed-chunk-21](figure/unnamed-chunk-21-1.png)
 
 
 ###Running models:
