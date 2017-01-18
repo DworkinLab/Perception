@@ -1,5 +1,8 @@
 ---
-  title: "Perception R Code"
+title: "Perception R Code"
+output:
+  word_document: default
+  pdf_document: default
 ---
   
 ##How do different DGRP di-hybrid lines vary in their ability to perceive and avoid predator cues?
