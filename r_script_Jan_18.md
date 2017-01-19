@@ -6,11 +6,32 @@ How do different DGRP di-hybrid lines vary in their ability to perceive and avoi
 
 ### Hypothesis:
 
-DGRP dihybrids will show significant genetic variation in ability to percieve predator cues
+DGRP dihybrids will show significant genetic variation in ability to percieve predator cues.
 
 ### Prediction:
 
 Each DGRP dihybrid lines will show within line consistancy, but display between line variability in the proportion within a spider vial, ranging from very low (~ 0%, avoiding spider cues) to a random assortment (~50%, randomly assortment, not recognizing spider cues).
+
+### What I still want done:
+
+1.  More precise statistics/ models
+2.  Correlation to aggression, activity and sociability
+3.  Increase sample size for some (or all) lines
+4.  Reanalyze some very high and low lines or with evolved populations
+
+### Notes on protocol and results
+
+-   10 sets of data collection, 7 of which have all lines at once, 3 days with random selection of lines (both sexes done on same day)
+
+-   Flies aged 4-5 days old, with opportunities to mate before experiment start
+
+-   10 flies of same sex into bin with two vials, one with spider, one without spider
+
+-   count number of flies in each vial after 24 hours and 48 hours
+
+-   removed all those with &lt; 6 flies in both vials together
+
+-   all results below for 48 hour counts
 
 ### Sex Correlation:
 
@@ -137,69 +158,3 @@ summary(mod2)
     ## Temp_Scaled  0.051  0.000              
     ## Humdty_Scld -0.084  0.004 -0.296       
     ## BP_Scaled   -0.006  0.001  0.372 -0.153
-
-``` r
-mod3 <- lmer(proportion_spider ~ 1 + (1|Date) 
-             + (1|DGRP), data = DGRP_by_counts)
-
-summary(mod3)
-```
-
-    ## Linear mixed model fit by REML ['lmerMod']
-    ## Formula: proportion_spider ~ 1 + (1 | Date) + (1 | DGRP)
-    ##    Data: DGRP_by_counts
-    ## 
-    ## REML criterion at convergence: 354.4
-    ## 
-    ## Scaled residuals: 
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.86789 -0.80425 -0.02344  0.89182  1.74799 
-    ## 
-    ## Random effects:
-    ##  Groups   Name        Variance  Std.Dev.
-    ##  DGRP     (Intercept) 0.0000000 0.00000 
-    ##  Date     (Intercept) 0.0006217 0.02493 
-    ##  Residual             0.0836797 0.28927 
-    ## Number of obs: 961, groups:  DGRP, 59; Date, 10
-    ## 
-    ## Fixed effects:
-    ##             Estimate Std. Error t value
-    ## (Intercept)  0.52093    0.01239   42.03
-
-``` r
-mod4 <- lmer(Mean_prop_spi ~ 1 + Sex + Mean_temp_scaled + Mean_hum_scaled + Mean_BP_scaled + 
-               (1|DGRP), data = DGRP_sub)
-summary(mod4)
-```
-
-    ## Linear mixed model fit by REML ['lmerMod']
-    ## Formula: Mean_prop_spi ~ 1 + Sex + Mean_temp_scaled + Mean_hum_scaled +  
-    ##     Mean_BP_scaled + (1 | DGRP)
-    ##    Data: DGRP_sub
-    ## 
-    ## REML criterion at convergence: -191.7
-    ## 
-    ## Scaled residuals: 
-    ##      Min       1Q   Median       3Q      Max 
-    ## -2.83046 -0.73402  0.06989  0.70417  2.18452 
-    ## 
-    ## Random effects:
-    ##  Groups   Name        Variance Std.Dev.
-    ##  DGRP     (Intercept) 0.000000 0.00000 
-    ##  Residual             0.009471 0.09732 
-    ## Number of obs: 118, groups:  DGRP, 59
-    ## 
-    ## Fixed effects:
-    ##                   Estimate Std. Error t value
-    ## (Intercept)       0.511204   0.013000   39.32
-    ## SexMale           0.019326   0.017927    1.08
-    ## Mean_temp_scaled -0.013413   0.054664   -0.25
-    ## Mean_hum_scaled   0.008155   0.028983    0.28
-    ## Mean_BP_scaled   -0.027795   0.048613   -0.57
-    ## 
-    ## Correlation of Fixed Effects:
-    ##             (Intr) SexMal Mn_tm_ Mn_hm_
-    ## SexMale     -0.686                     
-    ## Mn_tmp_scld  0.124  0.012              
-    ## Men_hm_scld  0.037  0.020 -0.400       
-    ## Men_BP_scld  0.186  0.000  0.758 -0.411

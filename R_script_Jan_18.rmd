@@ -6,12 +6,33 @@ output: github_document
 ##How do different DGRP di-hybrid lines vary in their ability to perceive and avoid predator cues?
   
 ###Hypothesis: 
-  DGRP dihybrids will show significant genetic variation in ability to percieve predator cues
+
+  DGRP dihybrids will show significant genetic variation in ability to percieve predator cues.
 
 
 ###Prediction:
-Each DGRP dihybrid lines will show within line consistancy, but display between line variability in the proportion within a spider vial, ranging from very low (~ 0%, avoiding spider cues) to a random assortment (~50%, randomly assortment, not recognizing spider cues).
 
+  Each DGRP dihybrid lines will show within line consistancy, but display between line variability in the proportion within a spider vial, ranging from very low (~ 0%, avoiding spider cues) to a random assortment (~50%, randomly assortment, not recognizing spider cues).
+
+###What I still want done:
+1) More precise statistics/ models
+2) Correlation to aggression, activity and sociability
+3) Increase sample size for some (or all) lines
+4) Reanalyze some very high and low lines or with evolved populations
+
+###Notes on protocol and results
+
+- 10 sets of data collection, 7 of which have all lines at once, 3 days with random selection of lines (both sexes done on same day)
+
+- Flies aged 4-5 days old, with opportunities to mate before experiment start
+
+- 10 flies of same sex into bin with two vials, one with spider, one without spider
+
+- count number of flies in each vial after 24 hours and 48 hours
+
+- removed all those with < 6 flies in both vials together
+
+- all results below for 48 hour counts
 
 
 ```{r, include=FALSE}
@@ -105,7 +126,6 @@ summary(DGRP_sub)
 
 ###Sex Correlation:
 
-
 ```{r, echo=FALSE}
 with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
 ```
@@ -156,10 +176,11 @@ summary(DGRP_by_countsFEMALE$DGRP)
 ggplot(data=DGRP_dev, aes(x=DGRP, y=Mean_prop_spi, colour=Sex))+ 
   geom_point(size = 4) + geom_errorbar(aes(ymax = Mean_prop_spi + se, ymin = Mean_prop_spi - se, width=0.5)) +
   guides(colour=FALSE) +
-  ggtitle("Proportion with spider for 59 dihybrid lines with std Error") +
+  ggtitle("Proportion of flies with spider (with std Error)") +
   xlab("DGRP") + ylab("Proportion with spider") +
   theme(axis.title.x = element_text(size=15)) +
   theme(axis.title.y = element_text(size=15)) +
+  geom_hline(yintercept = 0.5, size=0.25) +
   theme(plot.title = element_text(size=22)) +
   theme(axis.text.x = element_text(angle=90, hjust = 1))
 ```
@@ -173,6 +194,7 @@ ggplot(data=DGRP_dev_Male, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
   xlab("DGRP") + ylab("Proportion with Spider") +
   scale_fill_manual(values=c("#E69F00")) +
   guides(fill=FALSE, size=FALSE) +
+  geom_hline(yintercept = 0.5, size=0.25) +
   theme(plot.title = element_text(size=22)) +
   theme(axis.title.x = element_text(size=15)) +
   theme(axis.title.y = element_text(size=15)) +
@@ -188,6 +210,7 @@ ggplot(data=DGRP_dev_Female, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
   xlab("DGRP") + ylab("Proportion with Spider") +
   guides(fill=FALSE, size=FALSE) +
   theme(plot.title = element_text(size=22)) +
+  geom_hline(yintercept = 0.5, size=0.25) +
   theme(axis.title.x = element_text(size=15)) +
   theme(axis.title.y = element_text(size=15)) +
   theme(axis.text.x = element_text(angle=90, hjust = 1))  
@@ -226,14 +249,14 @@ summary(mod2)
 ```
 
 
-```{r}
+```{r, include=FALSE}
 mod3 <- lmer(proportion_spider ~ 1 + (1|Date) 
              + (1|DGRP), data = DGRP_by_counts)
 
 summary(mod3)
 ```
 
-```{r}
+```{r, include=FALSE}
 mod4 <- lmer(Mean_prop_spi ~ 1 + Sex + Mean_temp_scaled + Mean_hum_scaled + Mean_BP_scaled + 
                (1|DGRP), data = DGRP_sub)
 summary(mod4)
