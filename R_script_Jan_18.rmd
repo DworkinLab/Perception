@@ -194,6 +194,22 @@ ggplot(data=DGRP_dev_Female, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
 ```
 
 
+```{r,echo=FALSE}
+#Create sum of all
+DGRP_sum <- DGRP_by_counts %>%
+  group_by(Sex) %>%
+  summarise(Mean_prop_spi=mean(proportion_spider))
+
+ggplot(data=DGRP_sum, aes(x=Sex, y=Mean_prop_spi)) + 
+  geom_bar(stat="identity", position=position_dodge()) +
+  ggtitle("Total population means") +
+  ylim(0,1) +
+  xlab("Sex") + ylab("Proportion with Spider") +
+  scale_fill_manual(values=c("#E69F00")) +
+  guides(fill=FALSE, size=FALSE, alpha=FALSE)
+
+```
+
 ###Running models:
 ```{r}
 mod1 <- glmer(cbind(Not_spider, Spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date) 

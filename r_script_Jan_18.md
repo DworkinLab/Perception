@@ -50,6 +50,8 @@ Females
 
 ![](R_script_Jan_18_files/figure-markdown_github/unnamed-chunk-20-1.png)
 
+![](R_script_Jan_18_files/figure-markdown_github/unnamed-chunk-21-1.png)
+
 ### Running models:
 
 ``` r
