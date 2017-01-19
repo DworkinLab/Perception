@@ -73,7 +73,7 @@ Females
 
 ![](R_script_Jan_18_files/figure-markdown_github/unnamed-chunk-21-1.png)
 
-### Running models:
+### Models:
 
 ``` r
 mod1 <- glmer(cbind(Not_spider, Spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date) 

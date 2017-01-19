@@ -225,14 +225,14 @@ ggplot(data=DGRP_sum, aes(x=Sex, y=Mean_prop_spi)) +
   geom_bar(stat="identity", position=position_dodge(), fill=c("#F8766D", "#00BFC4")) +
   ggtitle("Total population means") +
   ylim(0,1) +
-  geom_hline(yintercept = 0.5, size=0.25) +
+  geom_hline(yintercept = 0.5) +
   xlab("Sex") + ylab("Proportion with Spider") +
   scale_fill_manual(values=c("#00BFC4")) +
   guides(fill=FALSE, size=FALSE, alpha=FALSE, colour=FALSE)
 
 ```
 
-###Running models:
+###Models:
 ```{r}
 mod1 <- glmer(cbind(Not_spider, Spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date) 
               + (0 + Sex|DGRP), data = DGRP_by_counts, family = "binomial")
