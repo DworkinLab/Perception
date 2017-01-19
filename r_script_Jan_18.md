@@ -21,11 +21,11 @@ Each DGRP dihybrid lines will show within line consistancy, but display between 
 
 ### Notes on protocol and results
 
--   10 sets of data collection, 7 of which have all lines completed at once, first 3 days with random subset of lines (both sexes done on same day)
+-   10 sets of data collection, 7 days of which have all lines completed at once, first 3 days with random subset of lines (\*both sexes done on same day)
 
--   Flies aged 4-5 days, with opportunities to mate before experiment start
+-   Dihybrid flies aged 4-5 days, with opportunities to mate before experiment start
 
--   10 flies of same sex into bin with two vials, one with spider, one without spider
+-   10 flies of same sex into bin with two snap cap vials, one with spider, one without spider
 
 -   count number of flies in each vial after 24 and 48 hours
 
