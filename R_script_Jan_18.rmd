@@ -3,7 +3,7 @@ title: "Perception R Code"
 output: github_document
 ---
   
-##How do different DGRP di-hybrid lines vary in their ability to perceive and avoid predator cues?
+##How do different DGRP dihybrid lines vary in their ability to perceive and avoid predator cues?
   
 ###Hypothesis: 
 
@@ -15,29 +15,27 @@ output: github_document
   Each DGRP dihybrid lines will show within line consistancy, but display between line variability in the proportion within a spider vial, ranging from very low (~ 0%, avoiding spider cues) to a random assortment (~50%, randomly assortment, not recognizing spider cues).
 
 ###What I still want done:
-1) More precise statistics/ models
+1) More precise statistics (Bio 708)
 2) Correlation to aggression, activity and sociability
 3) Increase sample size for some (or all) lines
 4) Reanalyze some very high and low lines or with evolved populations
 
 ###Notes on protocol and results
 
-- 10 sets of data collection, 7 of which have all lines at once, 3 days with random selection of lines (both sexes done on same day)
+- 10 sets of data collection, 7 of which have all lines completed at once, first 3 days with random subset of lines (both sexes done on same day)
 
-- Flies aged 4-5 days old, with opportunities to mate before experiment start
+- Flies aged 4-5 days, with opportunities to mate before experiment start
 
 - 10 flies of same sex into bin with two vials, one with spider, one without spider
 
-- count number of flies in each vial after 24 hours and 48 hours
+- count number of flies in each vial after 24 and 48 hours
 
-- removed all those with < 6 flies in both vials together
+- removed all those with < 6 flies in both vials (spider vial + not spider vial >= 6)
 
 - all results below for 48 hour counts
 
 
 ```{r, include=FALSE}
-
-## in order to make a .md (for github): knit(input = "r_script_Jan_18.rmd", output = "r_script_Jan_18.md")
 #include=FALSE hides code and output
 #install.packages("ggplot2")
 #install.packages("dplyr")
@@ -192,7 +190,7 @@ ggplot(data=DGRP_dev_Male, aes(x=DGRP, y=Mean_prop_spi, fill=Sex)) +
   geom_errorbar(aes(ymax = Mean_prop_spi + se, ymin = Mean_prop_spi - se, width=0.5)) +
   ggtitle("Males") +
   xlab("DGRP") + ylab("Proportion with Spider") +
-  scale_fill_manual(values=c("#E69F00")) +
+  scale_fill_manual(values=c("#00BFC4")) +
   guides(fill=FALSE, size=FALSE) +
   geom_hline(yintercept = 0.5, size=0.25) +
   theme(plot.title = element_text(size=22)) +
@@ -224,12 +222,12 @@ DGRP_sum <- DGRP_by_counts %>%
   summarise(Mean_prop_spi=mean(proportion_spider))
 
 ggplot(data=DGRP_sum, aes(x=Sex, y=Mean_prop_spi)) + 
-  geom_bar(stat="identity", position=position_dodge()) +
+  geom_bar(stat="identity", position=position_dodge(), fill=c("#F8766D", "#00BFC4")) +
   ggtitle("Total population means") +
   ylim(0,1) +
   xlab("Sex") + ylab("Proportion with Spider") +
-  scale_fill_manual(values=c("#E69F00")) +
-  guides(fill=FALSE, size=FALSE, alpha=FALSE)
+  scale_fill_manual(values=c("#00BFC4")) +
+  guides(fill=FALSE, size=FALSE, alpha=FALSE, colour=FALSE)
 
 ```
 

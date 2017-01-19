@@ -1,8 +1,8 @@
 Perception R Code
 ================
 
-How do different DGRP di-hybrid lines vary in their ability to perceive and avoid predator cues?
-------------------------------------------------------------------------------------------------
+How do different DGRP dihybrid lines vary in their ability to perceive and avoid predator cues?
+-----------------------------------------------------------------------------------------------
 
 ### Hypothesis:
 
@@ -14,22 +14,22 @@ Each DGRP dihybrid lines will show within line consistancy, but display between 
 
 ### What I still want done:
 
-1.  More precise statistics/ models
+1.  More precise statistics (Bio 708)
 2.  Correlation to aggression, activity and sociability
 3.  Increase sample size for some (or all) lines
 4.  Reanalyze some very high and low lines or with evolved populations
 
 ### Notes on protocol and results
 
--   10 sets of data collection, 7 of which have all lines at once, 3 days with random selection of lines (both sexes done on same day)
+-   10 sets of data collection, 7 of which have all lines completed at once, first 3 days with random subset of lines (both sexes done on same day)
 
--   Flies aged 4-5 days old, with opportunities to mate before experiment start
+-   Flies aged 4-5 days, with opportunities to mate before experiment start
 
 -   10 flies of same sex into bin with two vials, one with spider, one without spider
 
--   count number of flies in each vial after 24 hours and 48 hours
+-   count number of flies in each vial after 24 and 48 hours
 
--   removed all those with &lt; 6 flies in both vials together
+-   removed all those with &lt; 6 flies in both vials (spider vial + not spider vial &gt;= 6)
 
 -   all results below for 48 hour counts
 
