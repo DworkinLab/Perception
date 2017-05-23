@@ -2,7 +2,7 @@
 
 #Packages:
 library(ggplot2)
-library(dplyr)
+ library(dplyr)
 library(lme4)
 library(car)
 library(effects)
@@ -83,11 +83,22 @@ DGRP_by_countsFEMALE <- subset(DGRP_by_counts, Sex == "Female")
 mod_male <- lmer(proportion_spider ~ DGRP+ Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_countsMALE)
 print(summary(mod_male), correlation = TRUE)
 Anova(mod_male)
-plot(allEffects(mod_male))
+#plot(allEffects(mod_male))
 plot(effect("DGRP", mod_male), rotx = 90, main="Male")
 
 mod_female <- lmer(proportion_spider ~ DGRP+ Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_countsFEMALE)
 print(summary(mod_female), correlation = TRUE)
 Anova(mod_female)
-plot(allEffects(mod_female))
+#plot(allEffects(mod_female))
 plot(effect("DGRP", mod_female), rotx = 90, main="Female")
+mod_female
+
+#summary(mod_female)$coefficients
+eff1 <- effect("DGRP", mod_female)
+eff1 <- as.data.frame(eff1)
+eff1
+p2 <- ggplot(eff1, aes(y = fit, x = reorder(DGRP,fit))) + 
+  geom_point(size = 4) + 
+  geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2) +
+  labs(y = "Fit", x = "DGRP Line")
+p2
