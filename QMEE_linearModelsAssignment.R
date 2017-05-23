@@ -110,8 +110,6 @@ print(summary(DGRP_by_counts))
 print(summary(DGRP_sub))
 
 
-
-
 #Perception Linear Models
 
 
