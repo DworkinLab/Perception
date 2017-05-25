@@ -68,11 +68,11 @@ Anova(mod2)
 plot(allEffects(mod2))
 plot(effect("DGRP", mod2), ylab = "Proportion with spider", rotx = 90)
 
-eff_plot <- effect("DGRP", mod_male)
+eff_plot <- effect("DGRP", mod2)
 eff_plot <- as.data.frame(eff_plot)
 #eff_plot
 p_eff <- ggplot(eff_plot, aes(y = fit, x = reorder(DGRP,fit))) + 
-  geom_point(size = 4) + 
+  geom_point(size = 2) + 
   geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2) +
   labs(y = "Fit", x = "DGRP Line") + 
   ggtitle("DGRP effect plot") +
