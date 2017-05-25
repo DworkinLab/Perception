@@ -96,7 +96,7 @@ xx
 dgrp_sex <- effect("DGRP*Sex", mod3)
 dgrp_sex <- as.data.frame(dgrp_sex)
 
-p_eff <- ggplot(data=dgrp_sex, aes(x=DGRP, y=fit, colour=Sex))+ 
+p_sex <- ggplot(data=dgrp_sex, aes(x=DGRP, y=fit, colour=Sex))+ 
   geom_point(size = 3, alpha=0.5) + 
   geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2) +
   labs(y = "Fit", x = "DGRP Line") + 
@@ -104,7 +104,7 @@ p_eff <- ggplot(data=dgrp_sex, aes(x=DGRP, y=fit, colour=Sex))+
   geom_hline(yintercept = 0.5, size=0.35, alpha=0.5) +
   theme(plot.title = element_text(size=22)) +
   theme(axis.text.x = element_text(angle=90, hjust = 1))
-p_eff
+p_sex
 
 DGRP_by_countsMALE <- subset(DGRP_by_counts, Sex == "Male")
 DGRP_by_countsFEMALE <- subset(DGRP_by_counts, Sex == "Female")
