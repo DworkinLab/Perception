@@ -6,6 +6,7 @@ library(ggplot2)
 library(lme4)
 library(car)
 library(effects)
+require(lattice)
 
 perception <- read.csv('Perception_all_Data.csv', h=TRUE)
 
@@ -60,92 +61,3 @@ line2 <- lm(DGRP_sub$prop_spider[DGRP_sub$Sex == "Female"] ~ DGRP_sub$prop_spide
 with(DGRP_sub, plot(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"], xlab = "Females", ylab = "Males", abline(line2), main = "Male Female correlation: proportion with spider"))
 
 
-#Models: 
-mod2 <- glmer(cbind(Spider, Not_spider) ~ 0+DGRP + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_counts, family = "binomial"
-)
-print(summary(mod2), correlation = TRUE)
-Anova(mod2)
-plot(allEffects(mod2))
-plot(effect("DGRP", mod2), ylab = "Proportion with spider", rotx = 90)
-
-eff_plot <- effect("DGRP", mod2)
-eff_plot <- as.data.frame(eff_plot)
-#eff_plot
-p_eff <- ggplot(eff_plot, aes(y = fit, x = reorder(DGRP,fit))) + 
-  geom_point(size = 2) + 
-  geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2) +
-  labs(y = "Fit", x = "DGRP Line") + 
-  ggtitle("DGRP effect plot") +
-  geom_hline(yintercept = 0.5, size=0.25) +
-  theme(plot.title = element_text(size=22)) +
-  theme(axis.text.x = element_text(angle=90, hjust = 1))
-p_eff
-
-
-#Model for sex effects
-
-DGRP_by_counts$proportion_spider
-mod3 <- lmer(proportion_spider ~ DGRP:Sex + Sex + DGRP + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_counts)
-print(summary(mod3), correlation = TRUE)
-Anova(mod3)
-plot(allEffects(mod3))
-plot(effect("DGRP:Sex", mod3), multiline = TRUE, rotx = 90)
-xx <- plot(effect("DGRP*Sex", mod3), multiline = FALSE, rotx = 90)
-xx
-
-dgrp_sex <- effect("DGRP*Sex", mod3)
-dgrp_sex <- as.data.frame(dgrp_sex)
-
-p_sex <- ggplot(data=dgrp_sex, aes(x=DGRP, y=fit, colour=Sex))+ 
-  geom_point(size = 3, alpha=0.5) + 
-  geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2) +
-  labs(y = "Fit", x = "DGRP Line") + 
-  ggtitle("DGRP proportion with spider effects plot") +
-  geom_hline(yintercept = 0.5, size=0.35, alpha=0.5) +
-  theme(plot.title = element_text(size=22)) +
-  theme(axis.text.x = element_text(angle=90, hjust = 1))
-p_sex
-
-DGRP_by_countsMALE <- subset(DGRP_by_counts, Sex == "Male")
-DGRP_by_countsFEMALE <- subset(DGRP_by_counts, Sex == "Female")
-
-#MALES
-mod_male <- lmer(proportion_spider ~ DGRP+ Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_countsMALE)
-print(summary(mod_male), correlation = TRUE)
-Anova(mod_male)
-#plot(allEffects(mod_male))
-plot(effect("DGRP", mod_male), rotx = 90, main="Male")
-
-eff_male <- effect("DGRP", mod_male)
-eff_male <- as.data.frame(eff_male)
-#eff_male
-p_male <- ggplot(eff_male, aes(y = fit, x = reorder(DGRP,fit))) + 
-  geom_point(size = 3, colour="blue") + 
-  geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2, colour="blue") +
-  labs(y = "Fit", x = "DGRP Line") + 
-  ggtitle("Male DGRP Lines") +
-  geom_hline(yintercept = 0.5, size=0.5) +
-  theme(plot.title = element_text(size=22)) +
-  theme(axis.text.x = element_text(angle=90, hjust = 1))
-p_male
-
-#FEMALES
-mod_female <- lmer(proportion_spider ~ DGRP+ Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_countsFEMALE)
-print(summary(mod_female), correlation = TRUE)
-Anova(mod_female)
-#plot(allEffects(mod_female))
-plot(effect("DGRP", mod_female), rotx = 90, main="Female")
-
-#CHANGE COLOUR!
-eff_female <- effect("DGRP", mod_female)
-eff_female <- as.data.frame(eff_female)
-#eff_female
-p_female <- ggplot(eff_female, aes(y = fit, x = reorder(DGRP,fit))) + 
-  geom_point(size = 3, colour="purple") + 
-  geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2, colour="purple") +
-  labs(y = "Fit", x = "DGRP Line") + 
-  ggtitle("Female DGRP Lines") +
-  geom_hline(yintercept = 0.5, size=0.5) +
-  theme(plot.title = element_text(size=22)) +
-  theme(axis.text.x = element_text(angle=90, hjust = 1))
-p_female
