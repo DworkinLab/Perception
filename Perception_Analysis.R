@@ -77,15 +77,10 @@ str(rr1)
 fixef(mod1)
 dotplot(rr1)
 qqmath(rr1)
-plot(rr1)
-head(rr1)
 
 
 rr1 <- ranef(mod1, condVar = TRUE)
-rr1
 pv <- attr(rr1$DGRP, "postVar")
-
-pv[2,2,59] # == last one...
 pv
 se_fem <- pv[1, 1, ]
 se_ma <- pv[2,2, ]
