@@ -2,7 +2,7 @@
 
 #Packages:
 library(ggplot2)
- library(dplyr)
+library(dplyr)
 library(lme4)
 library(car)
 library(effects)
@@ -60,4 +60,46 @@ line2 <- lm(DGRP_sub$prop_spider[DGRP_sub$Sex == "Female"] ~ DGRP_sub$prop_spide
 
 with(DGRP_sub, plot(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"], xlab = "Females", ylab = "Males", abline(line2), main = "Male Female correlation: proportion with spider"))
 
+
+#Model:
+## DGRP is a random effect
+
+#Remove date or temp,hum,bp:  Redundant to have both?
+
+mod1 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled #+ (1|Date) 
+              + (0 + Sex|DGRP), data = DGRP_by_counts, family = "binomial")
+summary(mod1)
+plot(allEffects(mod1))
+ranef(mod1)
+ranef(mod1, condVar = TRUE)
+rr1 <- ranef(mod1, condVar = TRUE)
+str(rr1)
+fixef(mod1)
+dotplot(rr1)
+qqmath(rr1)
+plot(rr1)
+head(rr1)
+
+
+rr1 <- ranef(mod1, condVar = TRUE)
+rr1
+pv <- attr(rr1$DGRP, "postVar")
+
+pv[2,2,59] # == last one...
+pv
+se_fem <- pv[1, 1, ]
+se_ma <- pv[2,2, ]
+#Data frame of intercepts
+rand.interc<-rr1$DGRP
+df<-data.frame(Intercepts=rr1$DGRP[,1:2], DGRP=rownames(rand.interc), se_female=se_fem, se_male=se_ma)
+head(df)
+colnames(df) <- c("Female_Int", "Male_Int", "DGRP", "Female_se", "Male_se")
+df$m.low <- with(df, Male_Int - 2 * Male_se)
+df$m.high <- with(df, Male_Int + 2 * Male_se)
+df$f.low <- with(df, Female_Int - 2 * Female_se)
+df$f.high <- with(df, Female_Int + 2 * Female_se)
+
+ggplot(df, aes(y=Female_Int, x=reorder(DGRP, Female_Int))) + geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + geom_point(, colour="red") + coord_flip() + labs(y="Intercept", x="DGRP Females")
+
+ggplot(df, aes(y=Male_Int, x=reorder(DGRP, Male_Int))) + geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + geom_point(, colour="blue") + coord_flip() + labs(y="Intercept", x="DGRP Males")
 

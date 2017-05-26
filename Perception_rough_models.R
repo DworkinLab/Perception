@@ -161,6 +161,74 @@ p_female <- ggplot(eff_female, aes(y = fit, x = reorder(DGRP,fit))) +
 p_female
 
 
+##########################################
+#FROM .rmd
+### Models:
+
+#Model 1: DGRP Lines
+#```
+mod2 <- glmer(cbind(Spider, Not_spider) ~ 0+DGRP + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_counts, family = "binomial")
+#```
+#```{r}
+print(summary(mod2), correlation = TRUE)
+Anova(mod2)
+plot(effect("DGRP", mod2), ylab = "Proportion with spider", rotx = 90)
+#```
+
+#Order into own plot with ggplot
+#```
+eff_plot <- effect("DGRP", mod2)
+eff_plot <- as.data.frame(eff_plot)
+#eff_plot
+p_eff <- ggplot(eff_plot, aes(y = fit, x = reorder(DGRP,fit))) + 
+  geom_point(size = 2) + 
+  geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2) +
+  labs(y = "Fit", x = "DGRP Line") + 
+  ggtitle("DGRP effect plot") +
+  geom_hline(yintercept = 0.5, size=0.25) +
+  theme(plot.title = element_text(size=22)) +
+  theme(axis.text.x = element_text(angle=90, hjust = 1))
+#```
+
+#```{r}
+print(p_eff)
+#```
+
+
+#Model 2: Sex Effects:
+  
+#```
+mod3 <- lmer(proportion_spider ~ DGRP:Sex + Sex + DGRP + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_counts)
+#```
+#```{r}
+print(summary(mod3), correlation = TRUE)
+Anova(mod3)
+
+plot(effect("DGRP:Sex", mod3), multiline = TRUE, rotx = 90)
+xx <- plot(effect("DGRP*Sex", mod3), multiline = FALSE, rotx = 90)
+xx
+#```
+
+#ggplot to order effects plot
+#```
+dgrp_sex <- effect("DGRP*Sex", mod3)
+dgrp_sex <- as.data.frame(dgrp_sex)
+
+p_sex <- ggplot(data=dgrp_sex, aes(x=DGRP, y=fit, colour=Sex))+ 
+  geom_point(size = 3, alpha=0.5) + 
+  geom_errorbar(aes(ymin = lower, ymax = upper), size = 1.2, width = 0.2) +
+  labs(y = "Fit", x = "DGRP Line") + 
+  ggtitle("DGRP and Sex; proportion with spider effects plot") +
+  geom_hline(yintercept = 0.5, size=0.35, alpha=0.5) +
+  theme(plot.title = element_text(size=22)) +
+  theme(axis.text.x = element_text(angle=90, hjust = 1))
+#```
+#```{r}
+p_sex
+#```
+
+#######################################
+
 
 ### Model Edits by Ian
 mod2.id <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (0 + Sex|DGRP) + (1|Date), 
@@ -218,21 +286,48 @@ ranef(mod1)
 ranef(mod1, condVar = TRUE)
 rr1 <- ranef(mod1, condVar = TRUE)
 str(rr1)
+
+attr(rr1$DGRP, "postVar")
 fixef(mod1)
 dotplot(rr1)
 qqmath(rr1)
 plot(rr1)
 
 #Females?
-theRan <- ranef(mod1, condVar=TRUE)
-head(theRan)
-pv <- attr(theRan$DGRP, "postVar")
-se <- pv[1, 1, ]
-theIntercepts <- theRan$DGRP[, 1, drop=F]
-theFrame <- cbind(theIntercepts, se)
-head(theFrame)
-names(theFrame)[1] <- "Intercept"
-theFrame$Low <- with(theFrame, Intercept - 2 * se)
-theFrame$High <- with(theFrame, Intercept + 2 * se)
-theFrame$Variable <- rownames(theFrame)
-ggplot(theFrame, aes(y=Intercept, x=reorder(Variable, Intercept))) + geom_linerange(aes(ymin=Low, ymax=High), colour="black") + geom_point(, colour="blue") + coord_flip() + labs(y="Intercept", x=NULL)
+#theRan <- ranef(mod1, condVar=TRUE)
+#head(theRan)
+#pv <- attr(theRan$DGRP, "postVar")
+#pv
+#se <- pv[1, 1, ]
+#se
+#theIntercepts <- theRan$DGRP[, 1, drop=F]
+#theFrame <- cbind(theIntercepts, se)
+#head(theFrame)
+#names(theFrame)[1] <- "Intercept"
+#theFrame$Low <- with(theFrame, Intercept - 2 * se)
+#theFrame$High <- with(theFrame, Intercept + 2 * se)
+#theFrame$Variable <- rownames(theFrame)
+#ggplot(theFrame, aes(y=Intercept, x=reorder(Variable, Intercept))) + geom_linerange(aes(ymin=Low, ymax=High), colour="black") + geom_point(, colour="blue") + coord_flip() + labs(y="Intercept", x="DGRP Females")
+
+
+rr1 <- ranef(mod1, condVar = TRUE)
+rr1
+pv <- attr(rr1$DGRP, "postVar")
+
+pv[2,2,59] # == last one...
+pv
+se_fem <- pv[1, 1, ]
+se_ma <- pv[2,2, ]
+#Data frame of intercepts
+rand.interc<-rr1$DGRP
+df<-data.frame(Intercepts=rr1$DGRP[,1:2], DGRP=rownames(rand.interc), se_female=se_fem, se_male=se_ma)
+head(df)
+colnames(df) <- c("Female_Int", "Male_Int", "DGRP", "Female_se", "Male_se")
+df$m.low <- with(df, Male_Int - 2 * Male_se)
+df$m.high <- with(df, Male_Int + 2 * Male_se)
+df$f.low <- with(df, Female_Int - 2 * Female_se)
+df$f.high <- with(df, Female_Int + 2 * Female_se)
+
+ggplot(df, aes(y=Female_Int, x=reorder(DGRP, Female_Int))) + geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + geom_point(, colour="red") + coord_flip() + labs(y="Intercept", x="DGRP Females")
+
+ggplot(df, aes(y=Male_Int, x=reorder(DGRP, Male_Int))) + geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + geom_point(, colour="blue") + coord_flip() + labs(y="Intercept", x="DGRP Males")
