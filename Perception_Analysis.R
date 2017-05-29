@@ -98,3 +98,20 @@ ggplot(df, aes(y=Female_Int, x=reorder(DGRP, Female_Int))) + geom_linerange(aes(
 
 ggplot(df, aes(y=Male_Int, x=reorder(DGRP, Male_Int))) + geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + geom_point(, colour="blue") + coord_flip() + labs(y="Intercept", x="DGRP Males")
 
+#Model comparison: comparing with random DGRP effects and without:
+
+#install.packages("pbkrtest")
+library("pbkrtest")
+
+#Large model: mod1
+#mod1 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date) + (0 + Sex|DGRP), data = DGRP_by_counts, family = "binomial")
+summary(mod1)
+
+#Small Model:
+mod2 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_counts, family = "binomial")
+
+
+PB_Mod <- PBmodcomp(mod1, mod2, nsim = 1000, ref = NULL, seed = NULL,
+          cl = NULL, details = 0)
+
+
