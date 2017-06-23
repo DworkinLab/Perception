@@ -53,12 +53,23 @@ DGRP_sub <-DGRP_by_counts %>%
 
 
 ###Sex Correlation:
-
 with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
+MFcor <- with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
+
+##rcorr:
+#install.packages("Hmisc")
+library(Hmisc)
+#??Hmisc
+with(DGRP_sub, rcorr(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"]))
 
 line2 <- lm(DGRP_sub$prop_spider[DGRP_sub$Sex == "Female"] ~ DGRP_sub$prop_spider[DGRP_sub$Sex == "Male"])
 
 with(DGRP_sub, plot(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"], xlab = "Females", ylab = "Males", abline(line2), main = "Male Female correlation: proportion with spider"))
+
+legend("bottomleft", bty="y", 
+       legend=paste("R = -0.28" , "p-value = 0.0321" ))
+
+
 
 
 #Model:
@@ -94,24 +105,40 @@ df$m.high <- with(df, Male_Int + 2 * Male_se)
 df$f.low <- with(df, Female_Int - 2 * Female_se)
 df$f.high <- with(df, Female_Int + 2 * Female_se)
 
-ggplot(df, aes(y=Female_Int, x=reorder(DGRP, Female_Int))) + geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + geom_point(, colour="red") + coord_flip() + labs(y="Intercept", x="DGRP Females")
+ggplot(df, aes(y=Female_Int, x=reorder(DGRP, Female_Int))) + 
+  geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + 
+  geom_point(colour="red") + 
+  coord_flip() + 
+  labs(y="Intercept", x="DGRP Females")
 
-ggplot(df, aes(y=Male_Int, x=reorder(DGRP, Male_Int))) + geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + geom_point(, colour="blue") + coord_flip() + labs(y="Intercept", x="DGRP Males")
+ggplot(df, aes(y=Male_Int, x=reorder(DGRP, Male_Int))) + 
+  geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + 
+  geom_point(colour="blue") + 
+  coord_flip() + 
+  labs(y="Intercept", x="DGRP Males")
 
 #Model comparison: comparing with random DGRP effects and without:
 
 #install.packages("pbkrtest")
 library("pbkrtest")
 
+#Removing temp, humidity and BP from analysis: Humidity showed to have an effect but this is incorperated into to date effect we keep!
+# With temp, humidity and BP removed.
 #Large model: mod1
-#mod1 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date) + (0 + Sex|DGRP), data = DGRP_by_counts, family = "binomial")
+mod1 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + (1|Date) + (0 + Sex|DGRP),
+              data = DGRP_by_counts, family = "binomial")
 summary(mod1)
 
+mod2 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + (1|Date) + (1|DGRP),
+              data = DGRP_by_counts, family = "binomial")
+summary(mod2)
+
 #Small Model:
-mod2 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + Temp_Scaled + Humidity_Scaled + BP_Scaled + (1|Date), data = DGRP_by_counts, family = "binomial")
+mod3 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + (1|Date), 
+              data = DGRP_by_counts, family = "binomial")
 
 
-PB_Mod <- PBmodcomp(mod1, mod2, nsim = 1000, ref = NULL, seed = NULL,
+PB_Mod <- PBmodcomp(mod2, mod3, nsim = 100, ref = NULL, seed = NULL,
           cl = NULL, details = 0)
-
+summary(PB_Mod)
 
