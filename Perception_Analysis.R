@@ -54,6 +54,7 @@ DGRP_sub <-DGRP_by_counts %>%
 
 ###Sex Correlation:
 with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
+
 MFcor <- with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
 
 ##rcorr:
