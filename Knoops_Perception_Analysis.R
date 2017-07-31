@@ -120,10 +120,10 @@ mod3 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + (1|Date),
 summary(mod3)
 Anova(mod3)
 
-PB_Mod_1 <- PBmodcomp(mod2, mod3, nsim = 500, ref = NULL, seed = NULL,
+PB_Mod_1 <- PBmodcomp(mod2, mod3, nsim = 10, ref = NULL, seed = NULL,
                     cl = NULL, details = 0)
 summary(PB_Mod_1)
 
-PB_Mod_2 <- PBmodcomp(mod1, mod2, nsim = 500, ref = NULL, seed = NULL,
+PB_Mod_2 <- PBmodcomp(mod1, mod2, nsim = 10, ref = NULL, seed = NULL,
                     cl = NULL, details = 0)
 summary(PB_Mod_2)
