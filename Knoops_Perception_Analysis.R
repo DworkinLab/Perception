@@ -91,10 +91,10 @@ DGRP_sub <-DGRP_by_counts %>%
 with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
 
 MFcor <- with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
-
+cor.test(col1,col2)
 ##rcorr:
 #??Hmisc
-with(DGRP_sub, rcorr(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"]))
+with(DGRP_sub, rcorr(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"],type="pearson"))
 
 line2 <- lm(DGRP_sub$prop_spider[DGRP_sub$Sex == "Female"] ~ DGRP_sub$prop_spider[DGRP_sub$Sex == "Male"])
 
@@ -165,9 +165,21 @@ M1 +
   theme(text = element_text(size=15))
 
 VarCorr(mod1)
+cor.test(col1,col2)
+##rcorr:
+#??Hmisc
+with(DGRP_sub, rcorr(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"],type="pearson"))
 ?VarCorr
 VarCorr(mod1,comp=c("Variance", "Std.Dev"))
 rcorr(as.matrix(df), type="pearson")
+
+
+with(df, cor.test(Female_Int, Male_Int))
+
+
+
+
+head(df)
 
 line3 <- lm(df$Female_Int ~ df$Male_Int)
 line3
