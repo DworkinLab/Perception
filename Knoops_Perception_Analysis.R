@@ -165,8 +165,12 @@ M1 +
   theme(text = element_text(size=15))
 
 VarCorr(mod1)
-line3 <- lm(df$Female_Int ~ df$Male_Int)
+?VarCorr
+VarCorr(mod1,comp=c("Variance", "Std.Dev"))
+rcorr(as.matrix(df), type="pearson")
 
+line3 <- lm(df$Female_Int ~ df$Male_Int)
+line3
 with(df, plot(x = Female_Int,y = Male_Int, xlab = "Females", ylab = "Males", abline(line3), main = "Male Female correlation: proportion with spider"))
 
 with(df, plot(x = Female_Int,y = Male_Int, xlab = "Females", ylab = "Males", abline(line3)))
@@ -177,20 +181,20 @@ corr + geom_point() +
   theme(text = element_text(size=15))
 
 
-F2 <- ggplot(df, aes(y=Female_scale, 
-                     x=reorder(DGRP, Female_scale))) + 
-  geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + 
-  geom_point(colour="red") + 
-  coord_flip() + 
-  labs(y="Intercept", x="DGRP Females")
-F2
+#F2 <- ggplot(df, aes(y=Female_scale, 
+#                     x=reorder(DGRP, Female_scale))) + 
+#  geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + 
+##  geom_point(colour="red") + 
+#  coord_flip() + 
+#  labs(y="Intercept", x="DGRP Females")
+#F2
 # Error bars == upper and lower 95% confidence intervals
-M2 <- ggplot(df, aes(y=Male_scale, x=reorder(DGRP, Male_scale))) + 
-  geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + 
-  geom_point(colour="blue", alpha=.5) + 
-  coord_flip() + 
-  labs(y="Intercept", x="DGRP Males")
-M2
+#M2 <- ggplot(df, aes(y=Male_scale, x=reorder(DGRP, Male_scale))) + 
+#  geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + 
+#  geom_point(colour="blue", alpha=.5) + 
+#  coord_flip() + 
+#  labs(y="Intercept", x="DGRP Males")
+#M2
 
 
 
@@ -215,11 +219,11 @@ mod3 <- glmer(cbind(Spider, Not_spider) ~ 1 + Sex + (1|Date),
 summary(mod3)
 Anova(mod3)
 
-PB_Mod_1 <- PBmodcomp(mod2, mod3, nsim = 10, ref = NULL, seed = NULL,
-                    cl = NULL, details = 0)
-summary(PB_Mod_1)
+#PB_Mod_1 <- PBmodcomp(mod2, mod3, nsim = 10, ref = NULL, seed = NULL,
+#                    cl = NULL, details = 0)
+#summary(PB_Mod_1)
 
-PB_Mod_2 <- PBmodcomp(mod1, mod2, nsim = 10, ref = NULL, seed = NULL,
-                    cl = NULL, details = 0)
-summary(PB_Mod_2)
+#PB_Mod_2 <- PBmodcomp(mod1, mod2, nsim = 10, ref = NULL, seed = NULL,
+#                    cl = NULL, details = 0)
+#summary(PB_Mod_2)
 
