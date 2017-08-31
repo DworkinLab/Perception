@@ -115,6 +115,7 @@ summary(mod1)
 
 rr1 <- ranef(mod1, condVar = TRUE)
 head(rr1)
+
 pv <- attr(rr1$DGRP, "postVar")
 pv
 se_fem <- pv[1, 1, ]
@@ -129,15 +130,17 @@ df$m.high <- with(df, Male_Int + 2 * Male_se)
 df$f.low <- with(df, Female_Int - 2 * Female_se)
 df$f.high <- with(df, Female_Int + 2 * Female_se)
 
-df$Male_scale  <- df$Male_Int + 0.5
-df$Female_scale  <- df$Female_Int + 0.5
+colMeans(ranef(mod1)$DGRP)
+df$Male_scale  <- df$Male_Int + (0.08348933)
+df$Female_scale  <- df$Female_Int + 0.06116928
 df$m.scale.low  <- df$m.low + 0.5
 df$m.scale.high  <- df$m.high + 0.5
 df$f.scale.low  <- df$f.low + 0.5
 df$f.scale.high  <- df$f.high + 0.5
 
 
-
+fixef(mod1)
+coef(mod1)$DGRP
 summary(mod1)
 cc1 <- coef(mod1)$DGRP
 cc1$DGRP <- df$DGRP
@@ -156,29 +159,38 @@ M1 <- ggplot(df, aes(y=Male_Int, x=reorder(DGRP, Male_Int))) +
   labs(y="Intercept", x="DGRP Males")
 
 
-F1
-M1
+F1 +
+  theme(text = element_text(size=15))
+M1 +
+  theme(text = element_text(size=15))
 
 VarCorr(mod1)
 line3 <- lm(df$Female_Int ~ df$Male_Int)
 
 with(df, plot(x = Female_Int,y = Male_Int, xlab = "Females", ylab = "Males", abline(line3), main = "Male Female correlation: proportion with spider"))
 
+with(df, plot(x = Female_Int,y = Male_Int, xlab = "Females", ylab = "Males", abline(line3)))
+
+corr <- ggplot(df, aes(x = Female_Int,y=Male_Int))
+corr + geom_point() +
+  labs(y="Female Intercept", x="Male Intercept") + geom_smooth(method="lm", colour="black") +
+  theme(text = element_text(size=15))
+
 
 F2 <- ggplot(df, aes(y=Female_scale, 
                      x=reorder(DGRP, Female_scale))) + 
-  geom_linerange(aes(ymin=f.scale.low, ymax=f.scale.high), colour="black") + 
+  geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + 
   geom_point(colour="red") + 
   coord_flip() + 
   labs(y="Intercept", x="DGRP Females")
-#F2
+F2
 # Error bars == upper and lower 95% confidence intervals
 M2 <- ggplot(df, aes(y=Male_scale, x=reorder(DGRP, Male_scale))) + 
-  geom_linerange(aes(ymin=m.scale.low, ymax=m.scale.high), colour="black") + 
+  geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + 
   geom_point(colour="blue", alpha=.5) + 
   coord_flip() + 
   labs(y="Intercept", x="DGRP Males")
-#M2
+M2
 
 
 
