@@ -14,51 +14,11 @@ library("pbkrtest")
 #Possibly not needed
 library(Hmisc)
 
-ggCaterpillar <- function(re, QQ=TRUE, likeDotplot=TRUE) {
-  require(ggplot2)
-  f <- function(x) {
-    pv   <- attr(x, "postVar")
-    cols <- 1:(dim(pv)[1])
-    se   <- unlist(lapply(cols, function(i) sqrt(pv[i, i, ])))
-    ord  <- unlist(lapply(x, order)) + rep((0:(ncol(x) - 1)) * nrow(x), each=nrow(x))
-    pDf  <- data.frame(y=unlist(x)[ord],
-                       ci=1.96*se[ord],
-                       nQQ=rep(qnorm(ppoints(nrow(x))), ncol(x)),
-                       ID=factor(rep(rownames(x), ncol(x))[ord], levels=rownames(x)[ord]),
-                       ind=gl(ncol(x), nrow(x), labels=names(x)))
-    
-    if(QQ) {  ## normal QQ-plot
-      p <- ggplot(pDf, aes(nQQ, y))
-      p <- p + facet_wrap(~ ind, scales="free")
-      p <- p + xlab("Standard normal quantiles") + ylab("Random effect quantiles")
-    } else {  ## caterpillar dotplot
-      p <- ggplot(pDf, aes(ID, y)) + coord_flip()
-      if(likeDotplot) {  ## imitate dotplot() -> same scales for random effects
-        p <- p + facet_wrap(~ ind)
-      } else {           ## different scales for random effects
-        p <- p + facet_grid(ind ~ ., scales="free_y")
-      }
-      p <- p + xlab("Levels") + ylab("Random effects")
-    }
-    
-    p <- p + theme(legend.position="none")
-    p <- p + geom_hline(yintercept=0)
-    p <- p + geom_errorbar(aes(ymin=y-ci, ymax=y+ci), width=0, colour="black")
-    p <- p + geom_point(aes(size=1.2), colour="blue") 
-    return(p)
-  }
-  
-  lapply(re, f)
-}
-
-
-
-
 perception <- read.csv('Perception_all_Data.csv', h=TRUE)
 
 #Remove all temp, bp and humidity (not using in analysis) and 24 hour counts
 #Note: Humidity showed to have some effect but beacues this is only three readings over 48 hours, day effects should incorperate changing humiduty throughout the day
-
+head(perception)
 perception <- subset(perception, select = -c(Spider_24, Not_Spider_24, Outside_24, Humidity_start, Humidity_24, Humidity_48, Temp_start, Temp_24, Temp_48, BP_Start, BP_24, BP_48) )
 
 #DGRP as factor
@@ -91,7 +51,7 @@ DGRP_sub <-DGRP_by_counts %>%
 with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
 
 MFcor <- with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
-cor.test(col1,col2)
+
 ##rcorr:
 #??Hmisc
 with(DGRP_sub, rcorr(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"],type="pearson"))
@@ -150,26 +110,30 @@ F1 <- ggplot(df, aes(y=Female_Int, x=reorder(DGRP, Female_Int))) +
   geom_linerange(aes(ymin=f.low, ymax=f.high), colour="black") + 
   geom_point(colour="red", alpha=.5) + 
   coord_flip() + 
-  labs(y="Intercept", x="DGRP Females")
+  labs(y="Line Variation", x="DGRP Females")
+
 # Error bars == upper and lower 95% confidence intervals
 M1 <- ggplot(df, aes(y=Male_Int, x=reorder(DGRP, Male_Int))) + 
   geom_linerange(aes(ymin=m.low, ymax=m.high), colour="black") + 
   geom_point(colour="blue", alpha=.5) + 
   coord_flip() + 
-  labs(y="Intercept", x="DGRP Males")
+  labs(y="Line Variation", x="DGRP Males")
 
-
+head(df)
 F1 +
-  theme(text = element_text(size=15))
+  theme(text = element_text(size=15)) + 
+  geom_hline(yintercept = 0)
+ 
 M1 +
-  theme(text = element_text(size=15))
+  theme(text = element_text(size=15)) + 
+  geom_hline(yintercept = 0)
 
 VarCorr(mod1)
-cor.test(col1,col2)
+
 ##rcorr:
 #??Hmisc
 with(DGRP_sub, rcorr(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"],type="pearson"))
-?VarCorr
+
 VarCorr(mod1,comp=c("Variance", "Std.Dev"))
 rcorr(as.matrix(df), type="pearson")
 
@@ -179,7 +143,6 @@ with(df, cor.test(Female_Int, Male_Int))
 
 
 
-head(df)
 
 line3 <- lm(df$Female_Int ~ df$Male_Int)
 line3
@@ -189,8 +152,9 @@ with(df, plot(x = Female_Int,y = Male_Int, xlab = "Females", ylab = "Males", abl
 
 corr <- ggplot(df, aes(x = Female_Int,y=Male_Int))
 corr + geom_point() +
-  labs(y="Female Intercept", x="Male Intercept") + geom_smooth(method="lm", colour="black") +
-  theme(text = element_text(size=15))
+  labs(y="Female Line Variation", x="Male Line Variation") + geom_smooth(method="lm", colour="black") +
+  theme(text = element_text(size=20), 
+        axis.text.x= element_text(size=15), axis.text.y= element_text(size=15))
 
 
 #F2 <- ggplot(df, aes(y=Female_scale, 
@@ -239,3 +203,51 @@ Anova(mod3)
 #                    cl = NULL, details = 0)
 #summary(PB_Mod_2)
 
+
+
+
+
+
+
+#seperate Male Female Effects
+
+modMale <- glmer(cbind(Spider, Not_spider) ~ 1  + (1|Date) 
+              +  DGRP, data = DGRP_by_counts, family = "binomial", subset = Sex == "Male")
+
+summary(modMale)
+#worked Below
+modSEx <- glmer(cbind(Spider, Not_spider) ~ 1 + (1|Date) + (1|DGRP),
+              data = DGRP_by_counts, family = "binomial", subset = Sex=="Male")
+summary(modSEx)
+
+
+modFeSEx <- glmer(cbind(Spider, Not_spider) ~ 1 + (1|Date) + (1|DGRP),
+                data = DGRP_by_counts, family = "binomial", subset = Sex=="Female")
+summary(modFeSEx)
+
+
+#########
+
+rr2 <- ranef(modSEx, condVar = TRUE)
+head(rr2)
+mal<-rr2$DGRP
+mal
+rrmal<-data.frame(Intercepts=rr2$DGRP[,1], DGRP=rownames(mal))
+
+rr1 <- ranef(modFeSEx, condVar = TRUE)
+head(rr1)
+rand.interc<-rr1$DGRP
+rand.interc
+rrfem<-data.frame(Intercepts=rr1$DGRP[,1], DGRP=rownames(rand.interc))
+
+
+head(rrfem)
+head(rrmal)
+
+
+cor(rrmal$Intercepts, rrfem$Intercepts)
+rcorr(rrmal$Intercepts, rrfem$Intercepts, type="pearson")
+
+line2 <- lm(rrmal$Intercepts ~ rrfem$Intercepts)
+
+plot(x = rrmal$Intercepts, y = rrfem$Intercepts, xlab = "Males", ylab = "Females", abline(line2))
