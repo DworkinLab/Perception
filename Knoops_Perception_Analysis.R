@@ -12,7 +12,8 @@ require(lattice)
 library("pbkrtest")
 
 #Possibly not needed
-library(Hmisc)
+#install.packages('Hmisc')
+require(Hmisc)
 
 perception <- read.csv('Perception_all_Data.csv', h=TRUE)
 
@@ -53,7 +54,7 @@ with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
 MFcor <- with(DGRP_sub, cor(prop_spider[Sex == "Female"],prop_spider[Sex == "Male"] ))
 
 ##rcorr:
-#??Hmisc
+#Hmisc
 with(DGRP_sub, rcorr(x = prop_spider[Sex == "Female"],y = prop_spider[Sex == "Male"],type="pearson"))
 
 line2 <- lm(DGRP_sub$prop_spider[DGRP_sub$Sex == "Female"] ~ DGRP_sub$prop_spider[DGRP_sub$Sex == "Male"])
@@ -251,3 +252,4 @@ rcorr(rrmal$Intercepts, rrfem$Intercepts, type="pearson")
 line2 <- lm(rrmal$Intercepts ~ rrfem$Intercepts)
 
 plot(x = rrmal$Intercepts, y = rrfem$Intercepts, xlab = "Males", ylab = "Females", abline(line2))
+
